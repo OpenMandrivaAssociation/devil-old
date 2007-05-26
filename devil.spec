@@ -1,7 +1,7 @@
 %define	oname	DevIL
 %define	name	devil
 %define	version	1.6.7
-%define release %mkrel 12
+%define release %mkrel 13
 
 %define	major	1
 %define	lib_name_orig	lib%{name}
