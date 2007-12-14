@@ -75,7 +75,7 @@ NAS static library.
 %patch3 -p1 -b .headerfixes
 
 %build
-autoconf-2.5x
+autoconf
 CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations" \
 %configure2_5x	--with-pic \
 		--with-gnu-ld \
