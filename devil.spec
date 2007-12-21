@@ -24,6 +24,7 @@ Summary:	Open Source image library
 BuildRequires:	zlib-devel jpeg-devel tiff-devel autoconf2.5 SDL-devel
 BuildRequires:	png-devel lcms-devel mng-devel MesaGLU-devel
 BuildRequires:  allegro-devel ungif-devel libtool
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 DevIL is an Open Source image library whose distribution is done under the
