@@ -1,7 +1,7 @@
 %define	oname	DevIL
 %define	name	devil
 %define	version	1.6.7
-%define release %mkrel 13
+%define release %mkrel 14
 
 %define	major	1
 %define	lib_name_orig	lib%{name}
@@ -17,6 +17,7 @@ Patch0:		devil-1.6.7-debian-fixes.patch
 Patch1:		devil-1.6.7-link-against-gif.patch
 Patch2:		devil-1.6.7-fix-allegro-linking.patch
 Patch3:		devil-1.6.7-headerfixes.patch
+Patch4:		devil-1.6.7-header-void.patch
 License:	LGPL
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
@@ -73,6 +74,7 @@ NAS static library.
 %patch1 -p1 -b .lgif
 %patch2 -p1 -b .allegro
 %patch3 -p1 -b .headerfixes
+%patch4 -p0
 
 %build
 autoconf
