@@ -1,7 +1,7 @@
 %define	oname	DevIL
 %define	name	devil
 %define	version	1.6.7
-%define release %mkrel 14
+%define release %mkrel 15
 
 %define	major	1
 %define	lib_name_orig	lib%{name}
@@ -21,7 +21,7 @@ Patch4:		devil-1.6.7-header-void.patch
 License:	LGPL
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
-Summary:	Open Source image library
+Summary:	Image library
 BuildRequires:	zlib-devel jpeg-devel tiff-devel autoconf2.5 SDL-devel
 BuildRequires:	png-devel lcms-devel mng-devel MesaGLU-devel
 BuildRequires:  allegro-devel ungif-devel libtool
