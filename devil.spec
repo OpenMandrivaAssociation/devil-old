@@ -1,30 +1,31 @@
-%define	oname	DevIL
-%define	name	devil
-%define	version	1.6.7
-%define release %mkrel 17
+%define	oname DevIL
 
-%define	major	1
-%define	lib_name_orig	lib%{name}
-%define	lib_name	%mklibname %{name} %{major}
-%define	lib_name_devel	%mklibname %{name} %{major} -d
-%define	lib_name_static_devel	%mklibname %{name} %{major} -s -d
+%define major 1
+%define	libname	%mklibname %{name} %{major}
+%define develname %mklibname %{name} -d
+%define	staticname %mklibname %{name} -s -d
 
-Name:		%{name}
-Version:	%{version}
-Release:	%{release}
-Source0:	%{oname}-%{version}.tar.bz2
-Patch0:		devil-1.6.7-debian-fixes.patch
-Patch1:		devil-1.6.7-link-against-gif.patch
-Patch2:		devil-1.6.7-fix-allegro-linking.patch
-Patch3:		devil-1.6.7-headerfixes.patch
-Patch4:		devil-1.6.7-header-void.patch
-License:	LGPL
+Summary:	Open source image library
+Name:		devil
+Version:	1.7.1
+Release:	%mkrel 1
+License:	LGPLv2.1
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
-Summary:	Image library
-BuildRequires:	zlib-devel jpeg-devel tiff-devel autoconf2.5 SDL-devel
-BuildRequires:	png-devel lcms-devel mng-devel MesaGLU-devel
-BuildRequires:  allegro-devel ungif-devel libtool
+Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
+Patch1:		DevIL-1.7.1-underlinking.patch
+BuildRequires:	zlib-devel
+BuildRequires:	jpeg-devel
+BuildRequires:	tiff-devel
+BuildRequires:	SDL-devel
+BuildRequires:	png-devel
+BuildRequires:	lcms-devel
+BuildRequires:	mng-devel
+BuildRequires:	MesaGLU-devel
+BuildRequires:  allegro-devel
+BuildRequires:	ungif-devel
+BuildRequires:	libtool
+BuildRequires:	jasper-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -34,61 +35,73 @@ DevIL offers you a simple way to implement loading, manipulating, filtering,
 converting, displaying, saving from/to several different image formats in your
 own project.
 
-%package -n	%{lib_name}
+%package -n %{libname}
 Summary:	Libraries needed for programs using %{oname}
 Group:		System/Libraries
-Provides:	%{lib_name_orig}
+Provides:	lib%{name}
 Provides:	%{name}
 
-%description -n	%{lib_name}
+%description -n	%{libname}
 DevIL is an Open Source image library whose distribution is done under the
 terms of the GNU LGPL license.
 DevIL offers you a simple way to implement loading, manipulating, filtering,
 converting, displaying, saving from/to several different image formats in your
 own project.
 
-%package -n	%{lib_name_devel}
+%package -n %{develname}
 Summary:	Development headers and libraries for writing programs using %{oname}
 Group:		Development/C
-Requires:	%{lib_name} = %{version} allegro-devel
+Requires:	%{libname} = %{version}-%{release}
+Requires:	allegro-devel
 %define	_requires_exceptions	devel(liballeg.*
-Provides:	%{lib_name_orig}-devel = %{version}-%{release}
+Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
 
-%description -n	%{lib_name_devel}
-Development headers and libraries for writing programs using %{oname}
+%description -n	%{develname}
+Development headers and libraries for writing programs using %{oname}.
 
-%package -n     %{lib_name_static_devel}
-Summary:        NAS static library
+%package -n     %{staticname}
+Summary:	Static library for %{oname}
 Group:          Development/C
-Requires:       %{lib_name}-devel = %{version}
-Provides:       %{lib_name_orig}-static-devel = %{version}-%{release}
+Requires:       %{libname}-devel = %{version}-%{release}
+Provides:       lib%{name}-static-devel = %{version}-%{release}
 Provides:       %{name}-static-devel = %{version}-%{release}
 
-%description -n %{lib_name_static_devel}
-NAS static library.
+%description -n %{staticname}
+Static library for %{oname}.
 
 %prep
-%setup -q -n %{oname}-%{version}
-%patch0 -p1 -b .debian
-%patch1 -p1 -b .lgif
-%patch2 -p1 -b .allegro
-%patch3 -p1 -b .headerfixes
-%patch4 -p0
+%setup -q -c
+%patch1 -p0 -b .lgif
+
+chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 
 %build
-autoconf
-CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations" \
+export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations"
+
+./autogen.sh
+
 %configure2_5x	--with-pic \
 		--with-gnu-ld \
 		--enable-shared \
-		--with-x \
-		--enable-static
-%make LIBTOOL=%{_bindir}/libtool
+		--enable-static \
+		%ifnarch ix86
+		--enable-x86_64 \
+		--enable-sse \
+		--enable-sse2 \
+		--disable-sse3 \
+		%else
+		--enable-x86 \
+		--disable-sse \
+		--disable-sse2 \
+		--disable-sse3 \
+		%endif
+		--with-x
+%make 
 
 %install
 rm -rf %{buildroot}
-%makeinstall
+%makeinstall_std
 
 %if %mdkversion < 200900
 %post -n %{lib_name} -p /sbin/ldconfig
@@ -100,19 +113,17 @@ rm -rf %{buildroot}
 %clean
 rm -rf %{buildroot}
 
-%files -n %{lib_name}
+%files -n %{libname}
 %defattr(-,root,root)
-%doc AUTHORS BUGS CREDITS ChangeLog INSTALL Libraries.txt NEWS README.unix
-%{_libdir}/*.so.*
+%doc AUTHORS CREDITS ChangeLog Libraries.txt README.unix
+%{_libdir}/*.so.%{major}*
 
-%files -n %{lib_name_devel}
+%files -n %{develname}
 %defattr(-,root,root)
 %{_libdir}/*.so
 %{_libdir}/*.la
 %{_includedir}/IL
 
-%files -n %{lib_name_static_devel}
-%defattr(644,root,root,755)
+%files -n %{staticname}
+%defattr(-,root,root)
 %{_libdir}/*.a
-
-
