@@ -8,7 +8,7 @@
 Summary:	Open source image library
 Name:		devil
 Version:	1.7.1
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	LGPLv2.1
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
@@ -56,6 +56,7 @@ Requires:	allegro-devel
 %define	_requires_exceptions	devel(liballeg.*
 Provides:	lib%{name}-devel = %{version}-%{release}
 Provides:	%{name}-devel = %{version}-%{release}
+Obsoletes:	%{libname}-devel
 
 %description -n	%{develname}
 Development headers and libraries for writing programs using %{oname}.
@@ -66,6 +67,7 @@ Group:          Development/C
 Requires:       %{libname}-devel = %{version}-%{release}
 Provides:       lib%{name}-static-devel = %{version}-%{release}
 Provides:       %{name}-static-devel = %{version}-%{release}
+Obsoletes:      %{libname}-static-devel = %{version}-%{release}
 
 %description -n %{staticname}
 Static library for %{oname}.
