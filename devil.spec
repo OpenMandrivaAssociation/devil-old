@@ -7,9 +7,9 @@
 
 Summary:	Open source image library
 Name:		devil
-Version:	1.7.1
-Release:	%mkrel 2
-License:	LGPLv2.1
+Version:	1.7.2
+Release:	%mkrel 1
+License:	LGPLv2+
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
