@@ -26,6 +26,7 @@ BuildRequires:  allegro-devel
 BuildRequires:	ungif-devel
 BuildRequires:	libtool
 BuildRequires:	jasper-devel
+BuildRequires:	file
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
@@ -77,6 +78,10 @@ Static library for %{oname}.
 %patch1 -p0 -b .lgif
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
+
+# strip away annoying ^M
+find . -type f|xargs file|grep 'CRLF'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
+find . -type f|xargs file|grep 'text'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 
 %build
 export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations"
