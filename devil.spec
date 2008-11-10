@@ -1,3 +1,5 @@
+%define _disable_ld_no_undefined 1
+
 %define	oname DevIL
 
 %define major 1
