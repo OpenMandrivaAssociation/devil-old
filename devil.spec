@@ -1,3 +1,5 @@
+%define _disable_ld_no_undefined	1
+
 %define	oname DevIL
 
 %define major 1
@@ -18,6 +20,8 @@ Patch1:		devil-1.7.3-underlinking.patch
 # upstream bug http://sourceforge.net/tracker/index.php?func=detail&aid=1651292&group_id=4470&atid=104470
 # - AdamW 2008/12
 Patch2:		devil-1.7.3-void.patch
+# Fix location of a couple of headers - AdamW 2008/12
+Patch3:		devil-1.7.3-headers.patch
 BuildRequires:	zlib-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
@@ -81,6 +85,7 @@ Static library for %{oname}.
 %setup -q -c
 %patch1 -p1 -b .underlink
 %patch2 -p1 -b .void
+%patch3 -p1 -b .headers
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 
@@ -98,6 +103,8 @@ autoreconf
 		--with-gnu-ld \
 		--enable-shared \
 		--enable-static \
+		--enable-ILU \
+		--enable-ILUT \
 		%ifnarch ix86
 		--enable-x86_64 \
 		--enable-sse \
