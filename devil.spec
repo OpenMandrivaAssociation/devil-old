@@ -1,21 +1,23 @@
-%define _disable_ld_no_undefined 1
-
 %define	oname DevIL
 
 %define major 1
-%define	libname	%mklibname %{name} %{major}
-%define develname %mklibname %{name} -d
-%define	staticname %mklibname %{name} -s -d
+%define	libname		%mklibname %{name} %{major}
+%define develname	%mklibname %{name} -d
+%define	staticname	%mklibname %{name} -s -d
 
 Summary:	Open source image library
 Name:		devil
-Version:	1.7.2
-Release:	%mkrel 2
+Version:	1.7.3
+Release:	%mkrel 1
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
-Patch1:		DevIL-1.7.1-underlinking.patch
+Patch1:		devil-1.7.3-underlinking.patch
+# Fix inappropriate use of typedef void as a function argument - see
+# upstream bug http://sourceforge.net/tracker/index.php?func=detail&aid=1651292&group_id=4470&atid=104470
+# - AdamW 2008/12
+Patch2:		devil-1.7.3-void.patch
 BuildRequires:	zlib-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
@@ -77,7 +79,8 @@ Static library for %{oname}.
 
 %prep
 %setup -q -c
-%patch1 -p0 -b .lgif
+%patch1 -p1 -b .underlink
+%patch2 -p1 -b .void
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 
@@ -87,8 +90,9 @@ find . -type f|xargs file|grep 'text'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 
 %build
 export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations"
-
-./autogen.sh
+# using autogen.sh results in configure failing with a problem in
+# ADD_CFLAGS, as of 0.7.3 - AdamW 2008/12
+autoreconf
 
 %configure2_5x	--with-pic \
 		--with-gnu-ld \
