@@ -9,19 +9,19 @@
 
 Summary:	Open source image library
 Name:		devil
-Version:	1.7.3
-Release:	%mkrel 2
+Version:	1.7.5
+Release:	%mkrel 1
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
-Patch1:		devil-1.7.3-underlinking.patch
+#Patch1:		devil-1.7.3-underlinking.patch
 # Fix inappropriate use of typedef void as a function argument - see
 # upstream bug http://sourceforge.net/tracker/index.php?func=detail&aid=1651292&group_id=4470&atid=104470
 # - AdamW 2008/12
-Patch2:		devil-1.7.3-void.patch
+#Patch2:		devil-1.7.3-void.patch
 # Fix location of a couple of headers - AdamW 2008/12
-Patch3:		devil-1.7.3-headers.patch
+#Patch3:		devil-1.7.3-headers.patch
 BuildRequires:	zlib-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
@@ -82,10 +82,10 @@ Obsoletes:      %{_lib}devil1-static-devel
 Static library for %{oname}.
 
 %prep
-%setup -q -c
-%patch1 -p1 -b .underlink
-%patch2 -p1 -b .void
-%patch3 -p1 -b .headers
+%setup -q
+#%patch1 -p1 -b .underlink
+#%patch2 -p1 -b .void
+#%patch3 -p1 -b .headers
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 
@@ -143,6 +143,7 @@ rm -rf %{buildroot}
 %{_libdir}/*.so
 %{_libdir}/*.la
 %{_includedir}/IL
+%{_infodir}/*.info.*
 
 %files -n %{staticname}
 %defattr(-,root,root)
