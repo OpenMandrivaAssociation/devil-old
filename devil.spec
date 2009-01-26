@@ -99,24 +99,28 @@ export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -
 # ADD_CFLAGS, as of 0.7.3 - AdamW 2008/12
 autoreconf
 
-%configure2_5x	--with-pic \
-		--with-gnu-ld \
-		--enable-shared \
-		--enable-static \
-		--enable-ILU \
-		--enable-ILUT \
-		%ifnarch ix86
-		--enable-x86_64 \
-		--enable-sse \
-		--enable-sse2 \
-		--disable-sse3 \
-		%else
-		--enable-x86 \
-		--disable-sse \
-		--disable-sse2 \
-		--disable-sse3 \
-		%endif
-		--with-x
+%configure2_5x	\
+	--enable-shared \
+	--enable-static \
+	--enable-IL \
+	--enable-ILU \
+	--enable-ILUT \
+	%ifnarch ix86
+	--enable-x86_64 \
+	--enable-sse \
+	--enable-sse2 \
+	--disable-sse3 \
+	%else
+	--enable-x86 \
+	--disable-x86_64
+	--disable-sse \
+	--disable-sse2 \
+	--disable-sse3 \
+	%endif
+	--with-x \
+	--with-zlib=yes \
+	--enable-release
+
 %make 
 
 %install
