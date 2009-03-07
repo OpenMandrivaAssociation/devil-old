@@ -9,19 +9,12 @@
 
 Summary:	Open source image library
 Name:		devil
-Version:	1.7.5
-Release:	%mkrel 3
+Version:	1.7.7
+Release:	%mkrel 1
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
-#Patch1:		devil-1.7.3-underlinking.patch
-# Fix inappropriate use of typedef void as a function argument - see
-# upstream bug http://sourceforge.net/tracker/index.php?func=detail&aid=1651292&group_id=4470&atid=104470
-# - AdamW 2008/12
-#Patch2:		devil-1.7.3-void.patch
-# Fix location of a couple of headers - AdamW 2008/12
-#Patch3:		devil-1.7.3-headers.patch
 BuildRequires:	zlib-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
@@ -34,6 +27,7 @@ BuildRequires:  allegro-devel
 BuildRequires:	ungif-devel
 BuildRequires:	libtool
 BuildRequires:	jasper-devel
+BuildRequires:	OpenEXR-devel
 BuildRequires:	file
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
@@ -81,9 +75,6 @@ Static library for %{oname}.
 
 %prep
 %setup -q
-#%patch1 -p1 -b .underlink
-#%patch2 -p1 -b .void
-#%patch3 -p1 -b .headers
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 
@@ -95,7 +86,7 @@ find . -type f|xargs file|grep 'text'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations"
 # using autogen.sh results in configure failing with a problem in
 # ADD_CFLAGS, as of 0.7.3 - AdamW 2008/12
-autoreconf
+#autoreconf
 
 %configure2_5x	\
 	--enable-shared \
@@ -144,6 +135,7 @@ rm -rf %{buildroot}
 %defattr(-,root,root)
 %{_libdir}/*.so
 %{_libdir}/*.la
+%{_libdir}/pkgconfig/*.pc
 %{_includedir}/IL
 %{_infodir}/*.info.*
 
