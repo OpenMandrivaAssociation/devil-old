@@ -1,4 +1,4 @@
-%define _disable_ld_no_undefined	1
+##%define _disable_ld_no_undefined	1
 
 %define	oname DevIL
 
@@ -9,7 +9,7 @@
 
 Summary:	Open source image library
 Name:		devil
-Version:	1.7.7
+Version:	1.7.8
 Release:	%mkrel 1
 License:	LGPLv2+
 Group:		System/Libraries
@@ -72,6 +72,15 @@ Obsoletes:      %{_lib}devil1-static-devel
 
 %description -n %{staticname}
 Static library for %{oname}.
+
+%package 	utils
+Summary:	Tools provided by %{oname}
+Group:		System/Libraries
+Requires:	%{libname} = %{version}-%{release}
+Provides:	%{name}-utils = %{version}-%{release}
+
+%description 	utils
+This package contains tools provided by %{oname}.
 
 %prep
 %setup -q
@@ -142,3 +151,7 @@ rm -rf %{buildroot}
 %files -n %{staticname}
 %defattr(-,root,root)
 %{_libdir}/*.a
+
+%files utils
+%defattr(-,root,root)
+%{_bindir}/ilur
