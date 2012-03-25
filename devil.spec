@@ -2,19 +2,21 @@
 
 %define	oname DevIL
 
-%define major 1
+%define	major 1
 %define	libname		%mklibname %{name} %{major}
-%define develname	%mklibname %{name} -d
+%define	develname	%mklibname %{name} -d
 %define	staticname	%mklibname %{name} -s -d
 
 Summary:	Open source image library
 Name:		devil
 Version:	1.7.8
-Release:	%mkrel 4
+Release:	%mkrel 5
 License:	LGPLv2+
 Group:		System/Libraries
 URL:		http://openil.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
+Patch0:		devil-1.7.8-CVE-2009-3994.patch
+Patch1:		devil-1.7.8-libpng15.patch
 BuildRequires:	zlib-devel
 BuildRequires:	jpeg-devel
 BuildRequires:	tiff-devel
@@ -22,14 +24,13 @@ BuildRequires:	SDL-devel
 BuildRequires:	png-devel
 BuildRequires:	lcms-devel
 BuildRequires:	mng-devel
-BuildRequires:	MesaGLU-devel
-BuildRequires:  allegro-devel
+BuildRequires:	mesaglu-devel
+BuildRequires:	allegro-devel
 BuildRequires:	ungif-devel
 BuildRequires:	libtool
 BuildRequires:	jasper-devel
 BuildRequires:	OpenEXR-devel
 BuildRequires:	file
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 DevIL is an Open Source image library whose distribution is done under the
@@ -56,19 +57,23 @@ Summary:	Development headers and libraries for writing programs using %{oname}
 Group:		Development/C
 Requires:	%{libname} = %{version}-%{release}
 Requires:	allegro-devel
+%if %{mdvver} >= 201200
+%define __noautoreq 'devel\\(liballeg.*'
+%else
 %define	_requires_exceptions	devel(liballeg.*
+%endif
 Provides:	%{name}-devel = %{version}-%{release}
 Obsoletes:	%{_lib}devil1-devel
 
 %description -n	%{develname}
 Development headers and libraries for writing programs using %{oname}.
 
-%package -n     %{staticname}
+%package -n %{staticname}
 Summary:	Static library for %{oname}
-Group:          Development/C
-Requires:       %{develname} = %{version}-%{release}
-Provides:       %{name}-static-devel = %{version}-%{release}
-Obsoletes:      %{_lib}devil1-static-devel
+Group:		Development/C
+Requires:	%{develname} = %{version}-%{release}
+Provides:	%{name}-static-devel = %{version}-%{release}
+Obsoletes:	%{_lib}devil1-static-devel
 
 %description -n %{staticname}
 Static library for %{oname}.
@@ -79,11 +84,13 @@ Group:		System/Libraries
 Requires:	%{libname} = %{version}-%{release}
 Provides:	%{name}-utils = %{version}-%{release}
 
-%description 	utils
+%description	utils
 This package contains tools provided by %{oname}.
 
 %prep
 %setup -q
+%patch0 -p1
+%patch1 -p1
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 
@@ -119,39 +126,27 @@ export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -
 	--with-zlib=yes \
 	--enable-release
 
-%make 
+%make
 
 %install
-rm -rf %{buildroot}
+%__rm -rf %{buildroot}
 %makeinstall_std
 
-%if %mdkversion < 200900
-%post -n %{lib_name} -p /sbin/ldconfig
-%endif
-%if %mdkversion < 200900
-%postun -n %{lib_name} -p /sbin/ldconfig
-%endif
-
 %clean
-rm -rf %{buildroot}
+%__rm -rf %{buildroot}
 
 %files -n %{libname}
-%defattr(-,root,root)
 %doc AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 %{_libdir}/*.so.%{major}*
 
 %files -n %{develname}
-%defattr(-,root,root)
 %{_libdir}/*.so
-%{_libdir}/*.la
 %{_libdir}/pkgconfig/*.pc
 %{_includedir}/IL
 %{_infodir}/*.info.*
 
 %files -n %{staticname}
-%defattr(-,root,root)
 %{_libdir}/*.a
 
 %files utils
-%defattr(-,root,root)
 %{_bindir}/ilur
