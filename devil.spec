@@ -1,9 +1,9 @@
-%define	oname	DevIL
-%define	major	1
-%define	libIL	%mklibname IL %{major}
-%define	libILU	%mklibname ILU %{major}
-%define	libILUT	%mklibname ILUT %{major}
-%define	devname	%mklibname %{name} -d
+%define oname DevIL
+%define major 1
+%define libIL %mklibname IL %{major}
+%define libILU %mklibname ILU %{major}
+%define libILUT %mklibname ILUT %{major}
+%define devname %mklibname %{name} -d
 
 Summary:	Open source image library
 Name:		devil
@@ -19,7 +19,7 @@ Patch1:		devil-1.7.8-libpng15.patch
 BuildRequires:	file
 BuildRequires:	libtool
 BuildRequires:	jpeg-devel
-BuildRequires:	mng-devel
+BuildRequires:	pkgconfig(libmng)
 BuildRequires:	tiff-devel
 BuildRequires:	ungif-devel
 BuildRequires:	pkgconfig(allegro)
@@ -99,7 +99,7 @@ export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -
 # ADD_CFLAGS, as of 0.7.3 - AdamW 2008/12
 #autoreconf
 
-%configure2_5x	\
+%configure	\
 	--disable-static \
 	--enable-shared \
 	--enable-IL \
