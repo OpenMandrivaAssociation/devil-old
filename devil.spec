@@ -121,7 +121,7 @@ export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -
 	--with-zlib=yes \
 	--enable-release
 
-%make
+%make CPPFLAGS="-DNOINLINE"
 
 %install
 %makeinstall_std
