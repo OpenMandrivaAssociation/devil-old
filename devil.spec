@@ -93,8 +93,13 @@ chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 find . -type f|xargs file|grep 'CRLF'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 find . -type f|xargs file|grep 'text'|cut -d: -f1|xargs perl -p -i -e 's/\r//'
 
+# Don't second-guess compiler flags -- std=gnu99 isn't valid for C++
+sed -i -e 's,-std=gnu99 ,,g' m4/devil-definitions.m4 configure
+# C++ doesn't have restrict, but it has __restrict
+sed -i -e 's,restrict,__restrict,g' include/IL/il.h
+
 %build
-export CFLAGS="%{optflags} -O3 -funroll-loops -ffast-math -fomit-frame-pointer -fexpensive-optimizations"
+export CFLAGS="%{optflags} -Ofast -funroll-loops -ffast-math -fomit-frame-pointer"
 # using autogen.sh results in configure failing with a problem in
 # ADD_CFLAGS, as of 0.7.3 - AdamW 2008/12
 #autoreconf
