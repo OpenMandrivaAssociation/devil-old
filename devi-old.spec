@@ -1,3 +1,5 @@
+%define Werror_cflags %{nil}
+%define debug_package	%{nil}
 %define oname DevIL
 %define major 1
 %define libIL %mklibname IL-old %{major}
@@ -30,6 +32,9 @@ BuildRequires:	pkgconfig(libpng)
 BuildRequires:	pkgconfig(OpenEXR)
 BuildRequires:	pkgconfig(sdl)
 BuildRequires:	pkgconfig(zlib)
+# gcc power...
+BuildRequires:  desktop-file-utils
+BuildRequires:	gcc-c++, gcc, gcc-cpp
 
 %description
 DevIL is an Open Source image library whose distribution is done under the
@@ -117,6 +122,9 @@ sed -i -e 's,-std=gnu99 ,,g' m4/devil-definitions.m4 configure
 sed -i -e 's,restrict,__restrict,g' include/IL/il.h
 
 %build
+export CC=gcc
+export CXX=g++
+
 export CFLAGS="%{optflags} -Ofast -funroll-loops -ffast-math -fomit-frame-pointer"
 # using autogen.sh results in configure failing with a problem in
 # ADD_CFLAGS, as of 0.7.3 - AdamW 2008/12
