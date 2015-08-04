@@ -1,14 +1,14 @@
 %define oname DevIL
 %define major 1
-%define libIL %mklibname IL %{major}
-%define libILU %mklibname ILU %{major}
-%define libILUT %mklibname ILUT %{major}
-%define devname %mklibname %{name} -d
+%define libIL %mklibname IL-old %{major}
+%define libILU %mklibname ILU-old %{major}
+%define libILUT %mklibname ILUT-old %{major}
+%define devname %mklibname %{name}-old -d
 
 Summary:	Open source image library
-Name:		devil
+Name:		devil-old
 Version:	1.7.8
-Release:	13
+Release:	14
 License:	LGPLv2+
 Group:		System/Libraries
 Url:		http://openil.sourceforge.net/
@@ -38,14 +38,17 @@ DevIL offers you a simple way to implement loading, manipulating, filtering,
 converting, displaying, saving from/to several different image formats in your
 own project.
 
-%package 	utils
+%package 	utils-old
 Summary:	Tools provided by %{oname}
 Group:		System/Libraries
 Provides:	%{name} = %{version}-%{release}
 
-%description	utils
+%description	utils-old
 This package contains tools provided by %{oname}.
 
+%files utils-old
+%{_bindir}/ilur
+#-------------------------------------------------------------------------
 %package -n %{libIL}
 Summary:	Libraries needed for programs using %{oname}
 Group:		System/Libraries
@@ -54,6 +57,9 @@ Obsoletes:	%{_lib}devil1 < %{version}-%{release}
 %description -n	%{libIL}
 This package contains the shared library for %{oname}.
 
+%files -n %{libIL}
+%{_libdir}/libIL.so.%{major}*
+#-------------------------------------------------------------------------
 %package -n %{libILU}
 Summary:	Libraries needed for programs using %{oname}
 Group:		System/Libraries
@@ -61,7 +67,9 @@ Conflicts:	%{_lib}devil1 < %{version}-%{release}
 
 %description -n	%{libILU}
 This package contains the shared library for %{oname}.
-
+%files -n %{libILU}
+%{_libdir}/libILU.so.%{major}*
+#-------------------------------------------------------------------------
 %package -n %{libILUT}
 Summary:	Libraries needed for programs using %{oname}
 Group:		System/Libraries
@@ -70,6 +78,9 @@ Conflicts:	%{_lib}devil1 < %{version}-%{release}
 %description -n	%{libILUT}
 This package contains the shared library for %{oname}.
 
+%files -n %{libILUT}
+%{_libdir}/libILUT.so.%{major}*
+#-------------------------------------------------------------------------
 %package -n %{devname}
 Summary:	Development headers and libraries for writing programs using %{oname}
 Group:		Development/C
@@ -83,8 +94,15 @@ Obsoletes:	%{_lib}devel-static-devel = %{version}-%{release}
 %description -n	%{devname}
 Development headers and libraries for writing programs using %{oname}.
 
+%files -n %{devname}
+%doc AUTHORS CREDITS ChangeLog Libraries.txt README.unix
+%{_libdir}/*.so
+%{_libdir}/pkgconfig/*.pc
+%{_includedir}/IL
+%{_infodir}/*.info.*
+#-------------------------------------------------------------------------
 %prep
-%setup -q
+%setup -qn devil-%{version}
 %apply_patches
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
@@ -131,22 +149,11 @@ export CFLAGS="%{optflags} -Ofast -funroll-loops -ffast-math -fomit-frame-pointe
 %install
 %makeinstall_std
 
-%files utils
-%{_bindir}/ilur
 
-%files -n %{libIL}
-%{_libdir}/libIL.so.%{major}*
 
-%files -n %{libILU}
-%{_libdir}/libILU.so.%{major}*
 
-%files -n %{libILUT}
-%{_libdir}/libILUT.so.%{major}*
 
-%files -n %{devname}
-%doc AUTHORS CREDITS ChangeLog Libraries.txt README.unix
-%{_libdir}/*.so
-%{_libdir}/pkgconfig/*.pc
-%{_includedir}/IL
-%{_infodir}/*.info.*
+
+
+
 
