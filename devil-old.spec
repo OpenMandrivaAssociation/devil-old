@@ -131,9 +131,6 @@ export CC=gcc
 export CXX=g++
 
 export CFLAGS="%{optflags} -Ofast -funroll-loops -ffast-math -fomit-frame-pointer"
-# using autogen.sh results in configure failing with a problem in
-# ADD_CFLAGS, as of 0.7.3 - AdamW 2008/12
-#autoreconf
 
 %configure	\
 	--disable-static \
