@@ -113,7 +113,7 @@ Development headers and libraries for writing programs using %{oname}.
 #-------------------------------------------------------------------------
 %prep
 %setup -qn devil-%{version}
-%apply_patches
+%autopatch -p1
 
 chmod 644 AUTHORS CREDITS ChangeLog Libraries.txt README.unix
 
