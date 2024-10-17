@@ -13,7 +13,7 @@ Version:	1.7.8
 Release:	14
 License:	LGPLv2+
 Group:		System/Libraries
-Url:		http://openil.sourceforge.net/
+Url:		https://openil.sourceforge.net/
 Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
 Patch0:		devil-1.7.8-CVE-2009-3994.patch
 Patch1:		devil-1.7.8-libpng15.patch
