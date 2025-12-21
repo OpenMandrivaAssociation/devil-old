@@ -18,6 +18,11 @@ Source0:	http://downloads.sourceforge.net/openil/%{oname}-%{version}.tar.gz
 Patch0:		devil-1.7.8-CVE-2009-3994.patch
 Patch1:		devil-1.7.8-libpng15.patch
 
+BuildRequires:	autoconf
+BuildRequires:	automake
+BuildRequires:	libtool-base
+BuildRequires:	slibtool
+BuildRequires:	make
 BuildRequires:	file
 BuildRequires:	libtool
 BuildRequires:	jpeg-devel
